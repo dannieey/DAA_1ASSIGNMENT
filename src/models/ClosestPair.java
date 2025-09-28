@@ -7,13 +7,13 @@ import java.util.Comparator;
 public class ClosestPair {
     private final Metrics metrics;
 
-    public ClosestPair(Metrics metrics) {
-        this.metrics = metrics;
-    }
+    public ClosestPair(Metrics metrics) { this.metrics = metrics; }
 
     public double findClosest(Point[] points) {
         Point[] sortedByX = points.clone();
+        metrics.incrementAllocations(); // clone массива
         Arrays.sort(sortedByX, Comparator.comparingInt(p -> p.x));
+
         long start = System.nanoTime();
         double result = closestPairRec(sortedByX);
         long end = System.nanoTime();
@@ -22,8 +22,12 @@ public class ClosestPair {
     }
 
     private double closestPairRec(Point[] points) {
+        metrics.incrementCurrentDepth();
         int n = points.length;
-        if (n <= 3) return bruteForce(points);
+        if (n <= 3) {
+            metrics.decrementCurrentDepth();
+            return bruteForce(points);
+        }
 
         int mid = n / 2;
         Point midPoint = points[mid];
@@ -36,7 +40,9 @@ public class ClosestPair {
                 .filter(p -> Math.abs(p.x - midPoint.x) < d)
                 .sorted(Comparator.comparingInt(p -> p.y))
                 .toArray(Point[]::new);
+        metrics.incrementAllocations(); // массив strip
 
+        metrics.decrementCurrentDepth();
         return Math.min(d, stripClosest(strip, d));
     }
 
