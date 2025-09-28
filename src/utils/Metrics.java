@@ -20,7 +20,9 @@ public class Metrics {
 
     public void enterRecursion() {
         currentDepth++;
-        if (currentDepth > maxDepth) maxDepth = currentDepth;
+        if (currentDepth > maxDepth) {
+            maxDepth = currentDepth;
+        }
     }
 
     public void exitRecursion() {
