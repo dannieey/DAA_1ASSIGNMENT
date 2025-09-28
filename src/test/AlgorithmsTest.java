@@ -12,6 +12,7 @@ public class AlgorithmsTest {
         csvWriter.writeHeader();
 
         testMergeSort(csvWriter);
+        testQuickSort(csvWriter);
 
 
         System.out.println("\nAll tests done! Check results/output.csv");
@@ -23,6 +24,13 @@ public class AlgorithmsTest {
         new MergeSort(metrics).sort(arr);
         writer.writeRow("MergeSort", arr.length, metrics);
         printMetrics("MergeSort", arr.length, metrics);
+    }
+    private static void testQuickSort(CSVWriter writer) {
+        Metrics metrics = new Metrics();
+        int[] arr = generateRandomArray(1000);
+        new QuickSort(metrics).sort(arr);
+        writer.writeRow("QuickSort", arr.length, metrics);
+        printMetrics("QuickSort", arr.length, metrics);
     }
 
 
