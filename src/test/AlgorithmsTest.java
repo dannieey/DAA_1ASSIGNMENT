@@ -14,9 +14,9 @@ public class AlgorithmsTest {
         testMergeSort(csvWriter);
         testQuickSort(csvWriter);
         testDeterministicSelect(csvWriter);
+        testClosestPair(csvWriter);
 
-
-        System.out.println("\nAll tests done! Check results/output.csv");
+        System.out.println("\n All tests done! Check results/output.csv");
     }
 
     private static void testMergeSort(CSVWriter writer) {
@@ -26,6 +26,7 @@ public class AlgorithmsTest {
         writer.writeRow("MergeSort", arr.length, metrics);
         printMetrics("MergeSort", arr.length, metrics);
     }
+
     private static void testQuickSort(CSVWriter writer) {
         Metrics metrics = new Metrics();
         int[] arr = generateRandomArray(1000);
@@ -43,7 +44,13 @@ public class AlgorithmsTest {
         printMetrics("DeterministicSelect (median ~ " + res + ")", arr.length, metrics);
     }
 
-
+    private static void testClosestPair(CSVWriter writer) {
+        Metrics metrics = new Metrics();
+        ClosestPair.Point[] pts = generateRandomPoints(1000);
+        double res = new ClosestPair(metrics).findClosest(pts);
+        writer.writeRow("ClosestPair", pts.length, metrics);
+        printMetrics("ClosestPair (dist = " + res + ")", pts.length, metrics);
+    }
 
     private static void printMetrics(String algoName, int size, Metrics m) {
         System.out.printf("\n--- %s (n=%d) ---\n", algoName, size);
@@ -61,5 +68,10 @@ public class AlgorithmsTest {
         return arr;
     }
 
-
+    private static ClosestPair.Point[] generateRandomPoints(int n) {
+        Random rand = new Random();
+        ClosestPair.Point[] pts = new ClosestPair.Point[n];
+        for (int i = 0; i < n; i++) pts[i] = new ClosestPair.Point(rand.nextInt(10000), rand.nextInt(10000));
+        return pts;
+    }
 }
