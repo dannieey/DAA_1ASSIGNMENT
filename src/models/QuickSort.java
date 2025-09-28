@@ -7,9 +7,7 @@ public class QuickSort {
     private final Metrics metrics;
     private final Random rand = new Random();
 
-    public QuickSort(Metrics metrics) {
-        this.metrics = metrics;
-    }
+    public QuickSort(Metrics metrics) { this.metrics = metrics; }
 
     public void sort(int[] arr) {
         long start = System.nanoTime();
@@ -19,6 +17,7 @@ public class QuickSort {
     }
 
     private void quickSort(int[] arr, int low, int high) {
+        metrics.incrementCurrentDepth();
         while (low < high) {
             int pivotIndex = partition(arr, low, high);
             if (pivotIndex - low < high - pivotIndex) {
@@ -29,6 +28,7 @@ public class QuickSort {
                 high = pivotIndex - 1;
             }
         }
+        metrics.decrementCurrentDepth();
     }
 
     private int partition(int[] arr, int low, int high) {
