@@ -6,9 +6,7 @@ import java.util.Arrays;
 public class DeterministicSelect {
     private final Metrics metrics;
 
-    public DeterministicSelect(Metrics metrics) {
-        this.metrics = metrics;
-    }
+    public DeterministicSelect(Metrics metrics) { this.metrics = metrics; }
 
     public int select(int[] arr, int k) {
         long start = System.nanoTime();
@@ -19,14 +17,22 @@ public class DeterministicSelect {
     }
 
     private int selectRec(int[] arr, int left, int right, int k) {
-        if (left == right) return arr[left];
+        metrics.incrementCurrentDepth();
+        if (left == right) {
+            metrics.decrementCurrentDepth();
+            return arr[left];
+        }
         int pivot = medianOfMedians(arr, left, right);
         int pivotIndex = partition(arr, left, right, pivot);
 
         int length = pivotIndex - left + 1;
-        if (k == length) return arr[pivotIndex];
-        else if (k < length) return selectRec(arr, left, pivotIndex - 1, k);
-        else return selectRec(arr, pivotIndex + 1, right, k - length);
+        int result;
+        if (k == length) result = arr[pivotIndex];
+        else if (k < length) result = selectRec(arr, left, pivotIndex - 1, k);
+        else result = selectRec(arr, pivotIndex + 1, right, k - length);
+
+        metrics.decrementCurrentDepth();
+        return result;
     }
 
     private int medianOfMedians(int[] arr, int left, int right) {
@@ -36,6 +42,7 @@ public class DeterministicSelect {
             return arr[left + n / 2];
         }
         int[] medians = new int[(n + 4) / 5];
+        metrics.incrementAllocations();
         for (int i = 0; i < medians.length; i++) {
             int subLeft = left + i * 5;
             int subRight = Math.min(subLeft + 4, right);
