@@ -1,65 +1,38 @@
 package utils;
 
 public class Metrics {
-    private int comparison; //сколько раз сравнивали элементы
-    private int assignments; //сколько раз переписывали
-    private int currentDepth; //для отслеживания рекурсии
+    private int comparisons;
+    private int assignments;
+    private int currentDepth;
     private int maxDepth;
     private long runTime;
+    private int allocations;
 
+    public void incrementComparison() { comparisons++; }
+    public void incrementAssignments() { assignments++; }
+    public void incrementAllocations() { allocations++; }
 
-    //каждый раз когда сравнивают
-    public void incrementComparison() {
-        comparison++;
-    }
-    public int getComparison() {
-        return comparison;
-    }
-
-    //каждый раз когда присваивают
-    public void incrementAssignments() {
-        assignments++;
-    }
-    public int getAssignments() {
-        return assignments;
-    }
-
-    //глубина рекурсии
-    public void interRecursion() {
+    public void enterRecursion() {
         currentDepth++;
-        if(currentDepth > maxDepth) {
-            maxDepth=currentDepth;
-        }
-
-    }
-    public void exitRecursion(){
-        currentDepth--;
-    }
-    public int getCurrentDepth() {
-        return maxDepth;
+        if (currentDepth > maxDepth) maxDepth = currentDepth;
     }
 
-    //для времени
-    public void startTime() {
-        runTime=-System.nanoTime();
+    public void exitRecursion() { currentDepth--; }
+
+    public void setRunTime(long runTime) { this.runTime = runTime; }
+
+    public int getComparisons() { return comparisons; }
+    public int getAssignments() { return assignments; }
+    public int getMaxDepth() { return maxDepth; }
+    public long getRunTime() { return runTime; }
+    public int getAllocations() { return allocations; }
+
+    public void reset() {
+        comparisons = 0;
+        assignments = 0;
+        currentDepth = 0;
+        maxDepth = 0;
+        runTime = 0;
+        allocations = 0;
     }
-    public void endTime() {
-        runTime+=System.nanoTime();
-    }
-    public long getRunTime() {
-        return runTime;
-    }
-
-    //для сброса, чтобы при входе в алго, начинали все по новому
-    public void reset(){
-        comparison=0;
-        assignments=0;
-        currentDepth=0;
-        maxDepth=0;
-        runTime=0;
-
-    }
-
-
-
 }

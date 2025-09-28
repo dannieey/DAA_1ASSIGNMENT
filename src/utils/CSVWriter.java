@@ -1,32 +1,42 @@
 package utils;
 
-import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class CSVWriter {
-    private BufferedWriter bw;
-    private String separator=";";
+    private final String filePath;
 
-    public CSVWriter(String filename) throws IOException { //конструктор-->открываем файл для записи
-            bw=new BufferedWriter(new FileWriter(filename));
+    public CSVWriter(String filePath) {
+        this.filePath = filePath;
+
+        File dir = new File(filePath).getParentFile();
+        if (dir != null && !dir.exists()) {
+            dir.mkdirs();
+        }
     }
 
-    public void writeHeader(String line) throws IOException {
-        String header=String.join(separator,"Algorithm", "RunTime(ms)", "Comparison","Assignments", "MaxDepth", "Allocations");
-        bw.write(header);
-        bw.newLine();
+    public void writeHeader() {
+        try (FileWriter writer = new FileWriter(filePath, false)) {
+            writer.write("Algorithm,ArraySize,Comparisons,Assignments,MaxDepth,Allocations,RunTime(ns)\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void writeRow(String algoName, Metrics metrics, int allocations) throws IOException {
-        String row=algoName+separator+(metrics.getRunTime()/1_000_000.0)+separator+metrics.getComparison()+separator+metrics.getAssignments()+separator+metrics.getCurrentDepth()+separator+allocations;
-        bw.write(row);
-        bw.newLine();
-    }//заполняем
-
-    public void close() throws IOException {
-        if(bw!=null){
-            bw.close();
+    public void writeRow(String algorithm, int arraySize, Metrics metrics) {
+        try (FileWriter writer = new FileWriter(filePath, true)) {
+            writer.write(String.format("%s,%d,%d,%d,%d,%d,%d\n",
+                    algorithm,
+                    arraySize,
+                    metrics.getComparisons(),
+                    metrics.getAssignments(),
+                    metrics.getMaxDepth(),
+                    metrics.getAllocations(),
+                    metrics.getRunTime()
+            ));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
