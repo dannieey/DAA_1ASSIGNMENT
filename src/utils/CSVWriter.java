@@ -21,6 +21,7 @@ public class CSVWriter {
             writer.write("Algorithm,ArraySize,Comparisons,Assignments,MaxDepth,Allocations,RunTime(ns)\n");
         } catch (IOException e) {
             e.printStackTrace();
+
         }
     }
 

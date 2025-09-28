@@ -1,60 +1,56 @@
 package utils;
 
 public class Metrics {
-    private int comparisons;
-    private int assignments;
-    private int currentDepth;
-    private int maxDepth;
-    private long runTime;
-    private int allocations;
+    private int comparisons = 0;
+    private int assignments = 0;
+    private int currentDepth = 0;
+    private int maxDepth = 0;
+    private long runTime = 0;
+    private int allocations = 0;
 
+    // Comparisons
     public void incrementComparison() {
         comparisons++;
     }
+    public int getComparisons() {
+        return comparisons;
+    }
+
+    // Assignments
     public void incrementAssignments() {
         assignments++;
     }
-    public void incrementAllocations() {
-        allocations++;
+    public int getAssignments() {
+        return assignments;
     }
 
-    public void enterRecursion() {
+    // Depth
+    public void incrementCurrentDepth() {
         currentDepth++;
         if (currentDepth > maxDepth) {
             maxDepth = currentDepth;
         }
     }
-
-    public void exitRecursion() {
+    public void decrementCurrentDepth() {
         currentDepth--;
-    }
-
-    public void setRunTime(long runTime) {
-        this.runTime = runTime;
-    }
-
-    public int getComparisons() {
-        return comparisons;
-    }
-    public int getAssignments() {
-        return assignments;
     }
     public int getMaxDepth() {
         return maxDepth;
     }
-    public long getRunTime() {
-        return runTime;
+
+    // Allocations
+    public void incrementAllocations() {
+        allocations++;
     }
     public int getAllocations() {
         return allocations;
     }
 
-    public void reset() {
-        comparisons = 0;
-        assignments = 0;
-        currentDepth = 0;
-        maxDepth = 0;
-        runTime = 0;
-        allocations = 0;
+    // Runtime
+    public void setRunTime(long runTime) {
+        this.runTime = runTime;
+    }
+    public long getRunTime() {
+        return runTime;
     }
 }
