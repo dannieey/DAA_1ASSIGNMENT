@@ -13,6 +13,7 @@ public class AlgorithmsTest {
 
         testMergeSort(csvWriter);
         testQuickSort(csvWriter);
+        testDeterministicSelect(csvWriter);
 
 
         System.out.println("\nAll tests done! Check results/output.csv");
@@ -33,6 +34,14 @@ public class AlgorithmsTest {
         printMetrics("QuickSort", arr.length, metrics);
     }
 
+    private static void testDeterministicSelect(CSVWriter writer) {
+        Metrics metrics = new Metrics();
+        int[] arr = generateRandomArray(1000);
+        int k = arr.length / 2;
+        int res = new DeterministicSelect(metrics).select(arr, k);
+        writer.writeRow("DeterministicSelect(k=" + k + ")", arr.length, metrics);
+        printMetrics("DeterministicSelect (median ~ " + res + ")", arr.length, metrics);
+    }
 
 
 
